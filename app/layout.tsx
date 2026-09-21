@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Navigation from "./components/Navigation";
-import Logo from "./components/Logo";
+import { Josefin_Sans } from "next/font/google";
+import "@/app/_styles/globals.css";
+import Header from "@/app/_components/Header";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const josefin = Josefin_Sans({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -21,16 +15,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
-        <header>
-          <Logo />
-          <Navigation />
-        </header>
-        <main>{children}</main>
+    <html lang="en" className={` h-full antialiased`}>
+      <body
+        className={`relative min-h-full flex flex-col bg-primary-950 text-primary-100 ${josefin.className}`} // josefin.className is the font style
+      >
+        <Header />
+
+        <div className="flex-1 px-8 py-12 ">
+          <main className="max-w-7xl mx-auto">{children}</main>
+        </div>
         <footer>
           <p>Copyright by the wild oasis</p>
         </footer>
