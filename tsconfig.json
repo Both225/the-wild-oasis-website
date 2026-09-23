@@ -29,7 +29,9 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts",
-    "app/_components/Navigation.js"
+    "app/_components/Navigation.js",
+    "app/account/reservations/page.js",
+    "app/loading.js"
   ],
   "exclude": ["node_modules"]
 }

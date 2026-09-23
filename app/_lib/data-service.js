@@ -1,13 +1,16 @@
 import { eachDayOfInterval } from "date-fns";
 import supabase from "./supabase";
+import { notFound } from "next/navigation";
 
 /////////////
 // GET
 
+const restCountriesKey = process.env.REST_COUNTRIES_KEY;
+
 export async function getCabin(id) {
   const { data, error } = await supabase
     .from("cabins")
-    .select("*")
+    .select("name, maxCapacity, image, description")
     .eq("id", id)
     .single();
 
@@ -16,6 +19,7 @@ export async function getCabin(id) {
 
   if (error) {
     console.error(error);
+    notFound();
   }
 
   return data;
@@ -137,12 +141,23 @@ export async function getSettings() {
 
 export async function getCountries() {
   try {
-    const res = await fetch(
-      "https://api.restcountries.com/countries/v5/codes.alpha_2/CA?pretty=1",
-      { headers: { Authorization: "Bearer rc_live_demo" } },
-    );
-    const countries = await res.json();
-    return countries.data.objects;
+    const res = await fetch("https://api.restcountries.com/countries/v5", {
+      headers: {
+        Authorization: `Bearer ${restCountriesKey}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      console.error("API Response Error:", res.status, errorData);
+      throw new Error(`API returned status ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    console.log(data);
+
+    return data.data.objects;
   } catch {
     throw new Error("Could not fetch countries");
   }
